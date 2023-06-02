@@ -1,4 +1,3 @@
-<!-- noop: backdated edit -->
 # Skill Passport
 
 **Skills over grades. Proof over promises.**
