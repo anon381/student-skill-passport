@@ -1,4 +1,3 @@
-// noop: backdated edit
 import { type NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { users } from "@/lib/storage"
