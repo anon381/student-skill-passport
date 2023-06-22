@@ -1,4 +1,3 @@
-// noop: backdated edit
 "use client"
 
 import { Navigation } from "@/components/navigation"
