@@ -1,4 +1,3 @@
-// noop: backdated edit
 'use client'
 
 // Inspired by react-hot-toast library
