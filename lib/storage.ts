@@ -1,4 +1,3 @@
-// noop: backdated edit
 // Shared in-memory storage for users and skills
 // In production, replace this with a real database
 
