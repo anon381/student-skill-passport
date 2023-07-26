@@ -1,4 +1,3 @@
-// noop: backdated edit
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
