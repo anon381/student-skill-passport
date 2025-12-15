@@ -10,6 +10,8 @@ export interface User {
   program?: string
   department?: string
   company?: string
+  github?: string
+  linkedin?: string
 }
 
 export interface Skill {

@@ -2,6 +2,7 @@
 
 import type React from "react"
 
+import Link from "next/link"
 import { Navigation } from "@/components/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -86,6 +87,11 @@ export default function StudentDashboard() {
           return
         }
         const userData = await userResponse.json()
+        if (userData.user.role !== "student") {
+          router.replace(`/${userData.user.role || ""}` || "/")
+          return
+        }
+
         setUser(userData.user)
 
         // Get user's skills
@@ -140,6 +146,18 @@ export default function StudentDashboard() {
                     <h1 className="text-2xl font-bold">{user.name}</h1>
                     <p className="text-sm text-muted-foreground">{user.email}</p>
                     <p className="text-sm text-muted-foreground">{user.program}</p>
+                    <div className="mt-2 flex flex-wrap gap-2 text-xs text-primary">
+                      {user.github && (
+                        <Link href={`https://github.com/${user.github}`} target="_blank" className="hover:underline">
+                          GitHub: {user.github}
+                        </Link>
+                      )}
+                      {user.linkedin && (
+                        <Link href={user.linkedin} target="_blank" className="hover:underline">
+                          LinkedIn
+                        </Link>
+                      )}
+                    </div>
                   </div>
                 </div>
 

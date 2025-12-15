@@ -19,11 +19,15 @@ import { users } from "@/lib/storage"
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, name, role, program, department, company } = await request.json()
+    const { email, password, name, role, program, department, company, github, linkedin } = await request.json()
 
     // Validate input
     if (!email || !password || !name || !role) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+    }
+
+    if (role === "lecturer" && !linkedin) {
+      return NextResponse.json({ error: "LinkedIn is required for lecturers" }, { status: 400 })
     }
 
     // Check if user already exists
@@ -42,6 +46,8 @@ export async function POST(request: NextRequest) {
       program,
       department,
       company,
+      github,
+      linkedin,
     }
 
     console.log("[v0] User registered:", email, "Role:", role)
@@ -65,6 +71,8 @@ export async function POST(request: NextRequest) {
         program,
         department,
         company,
+        github,
+        linkedin,
       },
     })
   } catch (error) {

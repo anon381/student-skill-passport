@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -14,7 +14,14 @@ import { GraduationCap, BookOpen, Briefcase, ArrowLeft } from "lucide-react"
 
 export default function LoginPage() {
   const router = useRouter()
-  const [role, setRole] = useState<"student" | "lecturer" | "employer" | null>(null)
+  const searchParams = useSearchParams()
+  const roleFromQuery = searchParams.get("role")
+  const initialRole =
+    roleFromQuery === "student" || roleFromQuery === "lecturer" || roleFromQuery === "employer"
+      ? roleFromQuery
+      : null
+
+  const [role, setRole] = useState<"student" | "lecturer" | "employer" | null>(() => initialRole)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -47,14 +54,15 @@ export default function LoginPage() {
         return
       }
 
-      // Redirect based on role
+      // Redirect based on role (replace to avoid stale state and ensure cookies apply)
       if (role === "student") {
-        router.push("/student")
+        router.replace("/student")
       } else if (role === "lecturer") {
-        router.push("/lecturer")
+        router.replace("/lecturer")
       } else if (role === "employer") {
-        router.push("/employer")
+        router.replace("/employer")
       }
+      router.refresh()
     } catch (err) {
       console.error("[v0] Login error:", err)
       setError("An error occurred during login")
@@ -143,6 +151,7 @@ export default function LoginPage() {
 
   const config = roleConfig[role]
   const Icon = config.icon
+  const registerHref = role ? `/register?role=${role}` : "/register"
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background to-muted">
@@ -200,7 +209,7 @@ export default function LoginPage() {
 
             <div className="text-center text-sm text-muted-foreground">
               {"Don't have an account? "}
-              <Link href="/register" className="text-primary hover:underline">
+              <Link href={registerHref} className="text-primary hover:underline">
                 Register here
               </Link>
             </div>

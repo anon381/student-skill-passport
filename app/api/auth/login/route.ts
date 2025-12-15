@@ -46,6 +46,8 @@ export async function POST(request: NextRequest) {
         program: user.program,
         department: user.department,
         company: user.company,
+        github: user.github,
+        linkedin: user.linkedin,
       },
     })
   } catch (error) {

@@ -29,6 +29,8 @@ export async function GET() {
         program: user.program,
         department: user.department,
         company: user.company,
+        github: user.github,
+        linkedin: user.linkedin,
       },
     })
   } catch (error) {

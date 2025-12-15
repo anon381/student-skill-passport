@@ -9,6 +9,10 @@ export function Navigation() {
   const pathname = usePathname()
   const router = useRouter()
 
+  const isStudent = pathname?.startsWith("/student")
+  const isLecturer = pathname?.startsWith("/lecturer")
+  const isEmployer = pathname?.startsWith("/employer")
+
   const handleLogout = async () => {
     try {
       await fetch("/api/auth/logout", { method: "POST" })
@@ -27,21 +31,30 @@ export function Navigation() {
         </Link>
 
         <div className="flex items-center gap-4">
-          <Link href="/student">
-            <Button variant={pathname?.startsWith("/student") ? "default" : "ghost"} size="sm">
-              Student
-            </Button>
-          </Link>
-          <Link href="/lecturer">
-            <Button variant={pathname?.startsWith("/lecturer") ? "default" : "ghost"} size="sm">
-              Lecturer
-            </Button>
-          </Link>
-          <Link href="/employer">
-            <Button variant={pathname?.startsWith("/employer") ? "default" : "ghost"} size="sm">
-              Employer
-            </Button>
-          </Link>
+          {(!isStudent && !isLecturer && !isEmployer) || isStudent ? (
+            <Link href="/student">
+              <Button variant={pathname?.startsWith("/student") ? "default" : "ghost"} size="sm">
+                Student
+              </Button>
+            </Link>
+          ) : null}
+
+          {(!isStudent && !isLecturer && !isEmployer) || isLecturer ? (
+            <Link href="/lecturer">
+              <Button variant={pathname?.startsWith("/lecturer") ? "default" : "ghost"} size="sm">
+                Lecturer
+              </Button>
+            </Link>
+          ) : null}
+
+          {(!isStudent && !isLecturer && !isEmployer) || isEmployer ? (
+            <Link href="/employer">
+              <Button variant={pathname?.startsWith("/employer") ? "default" : "ghost"} size="sm">
+                Employer
+              </Button>
+            </Link>
+          ) : null}
+
           <Button variant="outline" size="sm" onClick={handleLogout} className="bg-transparent">
             <LogOut className="mr-2 h-4 w-4" />
             Logout

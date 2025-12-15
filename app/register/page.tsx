@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -14,7 +14,14 @@ import { GraduationCap, BookOpen, Briefcase, ArrowLeft } from "lucide-react"
 
 export default function RegisterPage() {
   const router = useRouter()
-  const [role, setRole] = useState<"student" | "lecturer" | "employer" | null>(null)
+  const searchParams = useSearchParams()
+  const roleFromQuery = searchParams.get("role")
+  const initialRole =
+    roleFromQuery === "student" || roleFromQuery === "lecturer" || roleFromQuery === "employer"
+      ? roleFromQuery
+      : null
+
+  const [role, setRole] = useState<"student" | "lecturer" | "employer" | null>(() => initialRole)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -23,6 +30,8 @@ export default function RegisterPage() {
     program: "",
     department: "",
     company: "",
+    github: "",
+    linkedin: "",
   })
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
@@ -36,6 +45,11 @@ export default function RegisterPage() {
       return
     }
 
+    if (role === "lecturer" && !formData.linkedin.trim()) {
+      setError("LinkedIn is required for lecturers")
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -44,6 +58,8 @@ export default function RegisterPage() {
         email: formData.email,
         password: formData.password,
         role: role!,
+        github: formData.github,
+        linkedin: formData.linkedin,
       }
 
       if (role === "student") payload.program = formData.program
@@ -64,14 +80,15 @@ export default function RegisterPage() {
         return
       }
 
-      // Redirect based on role
+      // Redirect based on role (use replace to ensure fresh load with new cookies)
       if (role === "student") {
-        router.push("/student")
+        router.replace("/student")
       } else if (role === "lecturer") {
-        router.push("/lecturer")
+        router.replace("/lecturer")
       } else if (role === "employer") {
-        router.push("/employer")
+        router.replace("/employer")
       }
+      router.refresh()
     } catch (err) {
       console.error("[v0] Registration error:", err)
       setError("An error occurred during registration")
@@ -227,6 +244,29 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="github">GitHub Username (optional)</Label>
+              <Input
+                id="github"
+                type="text"
+                placeholder="e.g., linamakes"
+                value={formData.github}
+                onChange={(e) => setFormData({ ...formData, github: e.target.value })}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="linkedin">LinkedIn URL {role === "lecturer" ? "(required)" : "(optional)"}</Label>
+              <Input
+                id="linkedin"
+                type="url"
+                placeholder="https://www.linkedin.com/in/your-profile"
+                value={formData.linkedin}
+                onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
+                required={role === "lecturer"}
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
@@ -256,7 +296,7 @@ export default function RegisterPage() {
 
             <div className="text-center text-sm text-muted-foreground">
               Already have an account?{" "}
-              <Link href="/login" className="text-primary hover:underline">
+              <Link href={role ? `/login?role=${role}` : "/login"} className="text-primary hover:underline">
                 Sign in
               </Link>
             </div>

@@ -91,6 +91,11 @@ export default function EmployerSearch() {
           return
         }
         const userData = await userResponse.json()
+        if (userData.user.role !== "employer") {
+          router.replace(`/${userData.user.role || ""}` || "/")
+          return
+        }
+
         setUser(userData.user)
 
         // Get all candidates with verified skills
