@@ -125,6 +125,31 @@ export default function StudentDashboard() {
     return null
   }
 
+  let githubValue = user.github?.trim() || ""
+  let linkedinValue = user.linkedin?.trim() || ""
+
+  // Heuristic swap if the inputs were reversed (LinkedIn contains github.com or GitHub contains linkedin.com)
+  if (githubValue && linkedinValue) {
+    const ghLooksLinkedIn = githubValue.includes("linkedin.com")
+    const liLooksGithub = linkedinValue.includes("github.com")
+    if (ghLooksLinkedIn && !liLooksGithub) {
+      ;[githubValue, linkedinValue] = [linkedinValue, githubValue]
+    } else if (liLooksGithub && !ghLooksLinkedIn) {
+      ;[githubValue, linkedinValue] = [linkedinValue, githubValue]
+    }
+  }
+
+  const githubHref = githubValue
+    ? githubValue.startsWith("http")
+      ? githubValue
+      : `https://github.com/${githubValue}`
+    : null
+  const linkedinHref = linkedinValue
+    ? linkedinValue.startsWith("http")
+      ? linkedinValue
+      : `https://www.linkedin.com/in/${linkedinValue}`
+    : null
+
   const verifiedSkills = skills.filter((s) => s.status === "approved")
   const pendingSkills = skills.filter((s) => s.status === "pending")
 
@@ -146,15 +171,15 @@ export default function StudentDashboard() {
                     <h1 className="text-2xl font-bold">{user.name}</h1>
                     <p className="text-sm text-muted-foreground">{user.email}</p>
                     <p className="text-sm text-muted-foreground">{user.program}</p>
-                    <div className="mt-2 flex flex-wrap gap-2 text-xs text-primary">
-                      {user.github && (
-                        <Link href={`https://github.com/${user.github}`} target="_blank" className="hover:underline">
-                          GitHub: {user.github}
+                    <div className="mt-2 flex flex-wrap gap-3 text-xs text-primary">
+                      {githubHref && (
+                        <Link href={githubHref} target="_blank" className="hover:underline">
+                          GitHub: {githubValue}
                         </Link>
                       )}
-                      {user.linkedin && (
-                        <Link href={user.linkedin} target="_blank" className="hover:underline">
-                          LinkedIn
+                      {linkedinHref && (
+                        <Link href={linkedinHref} target="_blank" className="hover:underline">
+                          LinkedIn: {linkedinValue}
                         </Link>
                       )}
                     </div>
