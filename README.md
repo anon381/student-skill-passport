@@ -1,30 +1,42 @@
-# Student skill passport
+# Student Skill Passport
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+A skills-first portfolio and verification platform for students, lecturers, and employers.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/yabets-projects-16ad71fe/v0-student-skill-passport)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/uxnUtFCobDp)
+## What it does
 
-## Overview
+- Students collect verified skill badges from courses, projects, clubs, and internships.
+- Lecturers verify submissions in one click and track learning outcomes.
+- Employers search and view verified competencies instead of relying on GPA or unverified claims.
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+## Key features
+
+- Role-based dashboards for students, lecturers, and employers
+- In-memory auth/session with role-based redirects (no external DB yet)
+
+- Sample Skill Passport preview to showcase how verified skills are presented
+
+## Tech stack
+
+- Next.js App Router (full-stack routes in `app/api`)
+- TypeScript, React, Tailwind, Radix UI
+- next-themes for light/dark mode
+- pnpm for package management
+
+## Local setup
+
+```bash
+pnpm install
+pnpm dev
+```
+
+Then open http://localhost:3000 (or the port shown in the console).
+
+## Current limitations
+
+- Data is stored in memory; restarting the dev server clears users and skills.
+- No persistence or per-lecturer assignment yet for pending skills.
+- Simple cookie-based session; no production hardening or hashing.
 
 ## Deployment
 
-Your project is live at:
-
-**[https://vercel.com/yabets-projects-16ad71fe/v0-student-skill-passport](https://vercel.com/yabets-projects-16ad71fe/v0-student-skill-passport)**
-
-## Build your app
-
-Continue building your app on:
-
-**[https://v0.app/chat/uxnUtFCobDp](https://v0.app/chat/uxnUtFCobDp)**
-
-## How It Works
-
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+Ready for Vercel/Next.js deployment; add a real database and harden auth before production.
