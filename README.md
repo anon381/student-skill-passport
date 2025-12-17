@@ -20,8 +20,6 @@ Your project is live at:
 
 Continue building your app on:
 
-**[https://v0.app/chat/uxnUtFCobDp](https://v0.app/chat/uxnUtFCobDp)**
-
 ## How It Works
 
 1. Create and modify your project using [v0.app](https://v0.app)
